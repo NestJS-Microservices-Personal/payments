@@ -6,7 +6,6 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const logger = new Logger('Payments-ms');
-  const PORT = envs.port;
 
   const app = await NestFactory.create(AppModule, { rawBody: true });
 
@@ -16,19 +15,16 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   )
-  
+
   app.connectMicroservice<MicroserviceOptions>({
-    transport:Transport.NATS,
-    options:{
-      servers: envs.stripeSuccessUrl
-    }
+    transport: Transport.NATS,
+    options: { servers: envs.natsServers }
   })
 
   app.startAllMicroservices();
-
   app.setGlobalPrefix('api/v1');
 
-  await app.listen(PORT);
-  logger.log(`Payments Microservice is running on ${PORT}`);
+  await app.listen(envs.port);
+  logger.log(`Payments Microservice is running on ${envs.port}`);
 }
 bootstrap();
