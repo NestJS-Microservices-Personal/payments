@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { envs } from 'src/config/envs';
 import Stripe from 'stripe';
 import { PaymentSessionDto } from './dto/payment-session.dto';
-import e, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 
 @Injectable()
 export class PaymentsService {
@@ -31,10 +31,8 @@ export class PaymentsService {
       payment_intent_data: {
         metadata: {
           orderId,
-          // integration_check: 'accept_a_payment',
         },
       },
-      // payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
       success_url: envs.stripeSuccessUrl,
