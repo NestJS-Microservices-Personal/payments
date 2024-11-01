@@ -16,12 +16,17 @@ async function bootstrap() {
     }),
   )
 
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.NATS,
-    options: { servers: envs.natsServers }
-  })
+  app.connectMicroservice<MicroserviceOptions>(
+    {
+      transport: Transport.NATS,
+      options: { servers: envs.natsServers }
+    },
+    {
+      inheritAppConfig: true
+    }
+  )
 
-  app.startAllMicroservices();
+  await app.startAllMicroservices();
   app.setGlobalPrefix('api/v1');
 
   await app.listen(envs.port);
